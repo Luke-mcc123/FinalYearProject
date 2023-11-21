@@ -11,33 +11,49 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="162dp"
-            android:layout_height="164dp"
-            android:layout_marginTop="101dp"
-            android:contentDescription="Image of a hammer and wrench"
-            android:src="@drawable/sharp_construction_120"
+            android:id="@+id/imageView8"
+            android:layout_width="239dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="152dp"
+            android:src="@drawable/sharp_supervised_user_circle_240"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="329dp"
-            android:layout_height="94dp"
-            android:contentDescription="@string/construction"
-            android:fontFamily="@font/roboto"
-            android:text="@string/construction"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <EditText
+            android:id="@+id/etvUsername"
+            android:layout_width="239dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/material_dynamic_neutral20"
+            android:ems="10"
+            android:hint="Username"
+            android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.145" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView8" />
+
+        <EditText
+            android:id="@+id/etvPassword"
+            android:layout_width="239dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/material_dynamic_neutral20"
+            android:ems="10"
+            android:hint="Password"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvUsername" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="239dp"
+            android:layout_height="48dp"
+            android:text="Login"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvPassword" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
