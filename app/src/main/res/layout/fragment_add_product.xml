@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AddProductFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <EditText
+            android:id="@+id/etvType"
+            android:layout_width="340dp"
+            android:layout_height="51dp"
+            android:ems="10"
+            android:hint="Type"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvBrand"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/roboto"/>
+
+
+        <EditText
+            android:id="@+id/etvNote"
+            android:layout_width="340dp"
+            android:layout_height="51dp"
+            android:ems="10"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/roboto"
+            android:hint="Note"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvType" />
+
+        <EditText
+            android:id="@+id/etvBarcode"
+            android:layout_width="340dp"
+            android:layout_height="51dp"
+            android:ems="10"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/roboto"
+            android:hint="Barcode"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="339dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto"
+            android:text="Enter New Product"
+            android:textAlignment="center"
+            android:textSize="34sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/etvBrand"
+            android:layout_width="340dp"
+            android:layout_height="51dp"
+            android:ems="10"
+            android:hint="Brand"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvBarcode"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/roboto"/>
+
+        <EditText
+            android:id="@+id/etvQuantity"
+            android:layout_width="340dp"
+            android:layout_height="51dp"
+            android:ems="10"
+            android:hint="Quantity"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvNote"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/roboto"/>
+
+        <Button
+            android:id="@+id/btn_insert"
+            android:layout_width="340dp"
+            android:layout_height="51dp"
+            android:text="Insert"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvQuantity"
+            android:fontFamily="@font/roboto"/>
+
+        <Button
+            android:id="@+id/btn_read"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:layout_marginStart="36dp"
+            android:text="Read"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert"
+            android:fontFamily="@font/roboto"/>
+
+        <Button
+            android:id="@+id/btn_update"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            app:layout_constraintEnd_toStartOf="@+id/btn_delete"
+            app:layout_constraintStart_toEndOf="@+id/btn_read"
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert"
+            android:fontFamily="@font/roboto"/>
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:layout_marginEnd="36dp"
+            android:text="Delete"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert"
+            android:fontFamily="@font/roboto"/>
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="388dp"
+            android:layout_height="288dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="440dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.076"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tvResult"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto"
+                android:visibility="visible" />
+
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
