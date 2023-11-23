@@ -13,11 +13,7 @@ import com.example.finalyearproject.databinding.FragmentAddProductBinding
 //private const val ARG_PARAM1 = "param1"
 //private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [AddProductFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class AddProductFragment : Fragment() {
 
     private var _binding: FragmentAddProductBinding? = null
@@ -81,11 +77,33 @@ class AddProductFragment : Fragment() {
             binding.etvQuantity.setText("")
         }
 
-        // Updates the quantity of products
+//        // Updates the quantity of products
+//        binding.btnUpdate.setOnClickListener {
+//            db.updateData()
+//            binding.btnRead.performClick()
+//        }
+
         binding.btnUpdate.setOnClickListener {
-            db.updateData()
-            binding.btnRead.performClick()
+            if (binding.etvBarcode.text.toString().isNotEmpty() &&
+                binding.etvBrand.text.toString().isNotEmpty() &&
+                binding.etvType.text.toString().isNotEmpty() &&
+                binding.etvNote.text.toString().isNotEmpty() &&
+                binding.etvQuantity.text.toString().isNotEmpty()
+            ) {
+                val product = Product(
+                    binding.etvBarcode.text.toString().toInt(),
+                    binding.etvBrand.text.toString(),
+                    binding.etvType.text.toString(),
+                    binding.etvNote.text.toString(),
+                    binding.etvQuantity.text.toString().toInt()
+                )
+                db.updateProductData(product)
+
+            }else {
+                Toast.makeText(context, "Please input Barcode of product and the updated details", Toast.LENGTH_SHORT).show()
+            }
         }
+
 
         // Deletes Table
         binding.btnDelete.setOnClickListener {

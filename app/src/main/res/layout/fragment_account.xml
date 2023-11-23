@@ -33,6 +33,18 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView8" />
 
         <EditText
+            android:id="@+id/etvRole"
+            android:layout_width="239dp"
+            android:layout_height="48dp"
+            android:backgroundTint="@color/material_dynamic_neutral20"
+            android:ems="10"
+            android:hint="Role (Only for Register)"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvPassword" />
+
+        <EditText
             android:id="@+id/etvPassword"
             android:layout_width="239dp"
             android:layout_height="48dp"
@@ -50,9 +62,37 @@
             android:layout_height="48dp"
             android:text="Login"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etvPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/etvRole" />
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="239dp"
+            android:layout_height="48dp"
+            android:text="Register New User"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
+
+        <TextView
+            android:id="@+id/tvUserResult"
+            android:layout_width="236dp"
+            android:layout_height="103dp"
+            android:layout_marginStart="89dp"
+            android:layout_marginEnd="89dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageView8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="20dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
