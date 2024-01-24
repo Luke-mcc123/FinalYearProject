@@ -62,11 +62,6 @@ dependencies {
     implementation ("androidx.activity:activity-ktx:$rootProject.activityVersion")
     val room_version = "2.6.0"
 
-    // Google Code Scanner Dependency
-    implementation ("com.google.android.gms:play-services-code-scanner:16.1.0")
-
-    implementation ("com.github.doyaaaaaken:kotlin-csv:0.13.0")
-
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")
 

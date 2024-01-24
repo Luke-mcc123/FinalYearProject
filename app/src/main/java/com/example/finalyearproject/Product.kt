@@ -16,16 +16,14 @@ class Product {
         brand: String,
         type: String,
         note: String,
-        quantity: Int?
+        quantity: Int
     ) {
 
         this.barcode = barcode
         this.brand = brand
         this.type = type
         this.note = note
-        if (quantity != null) {
-            this.quantity = quantity
-        }
+        this.quantity = quantity
     }
 
     // Empty Constructor

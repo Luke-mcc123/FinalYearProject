@@ -2,14 +2,10 @@ package com.example.finalyearproject
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.database.sqlite.SQLiteOpenHelper
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
-
-/**
- * Code Adapted from https://github.com/kmvignesh/SqliteExample
- */
 
 // Constants for database/column names
 const val DATABASE_NAME = "FinalYearProject.SQLite"
@@ -30,8 +26,7 @@ const val COL_PASSWORD = "Password"
 const val COL_ROLE = "Role"
 
 // Class responsible for handling the database operations
-class DataBaseHandler(private var context: Context) :
-    SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+class DataBaseHandler (private var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
     override fun onCreate(db: SQLiteDatabase?) {
 
@@ -55,9 +50,7 @@ class DataBaseHandler(private var context: Context) :
         TODO("Not yet implemented")
     }
 
-    // Update specific product
-    // Takes inputted barcode and finds related entry and updates the row with the new data
-    fun updateProductData(product: Product) {
+    fun updateProductData (product : Product){
         val db = this.writableDatabase
         var cv = ContentValues()
         cv.put(COL_BARCODE, product.barcode)
@@ -69,17 +62,9 @@ class DataBaseHandler(private var context: Context) :
         db.update(TABLE_PRODUCTS, cv, "barcode =" + product.barcode, null)
     }
 
-    // Delete specific product data
-    // Takes inputted barcode and deletes the associated row
-    fun deleteProductData(product: Product) {
-        val db = this.writableDatabase
-        db.delete(TABLE_PRODUCTS, "$COL_BARCODE = ?", arrayOf(product.barcode.toString()))
-        db.close()
-    }
 
-
-    // Method to insert product data into the database
-    fun insertData(product: Product) {
+    // Method to insert the data into the database
+    fun insertData (product: Product){
         val db = this.writableDatabase
         var cv = ContentValues()
 
@@ -92,22 +77,13 @@ class DataBaseHandler(private var context: Context) :
 
         // Insert data into the table and show a Toast message based on the result
         var result = db.insert(TABLE_PRODUCTS, null, cv)
-        if (result == -1.toLong())
-            Toast.makeText(
-                context,
-                "Please Ensure All Required Fields Are Filled Out",
-                Toast.LENGTH_SHORT
-            ).show()
+        if(result == -1.toLong())
+            Toast.makeText(context,"Please Ensure All Required Fields Are Filled Out",Toast.LENGTH_SHORT).show()
         else
-            Toast.makeText(
-                context,
-                "You Have Successfully Added " + product.brand + " " + product.type,
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(context,"You Have Successfully Added " + product.brand + " " + product.type,Toast.LENGTH_SHORT).show()
     }
 
-    // Method to create a new user
-    fun insertUserData(user: User) {
+    fun insertUserData (user: User){
         val db = this.writableDatabase
         var cv = ContentValues()
 
@@ -118,23 +94,15 @@ class DataBaseHandler(private var context: Context) :
 
         // Insert data into the table and show a toast message based on the result
         var result = db.insert(TABLE_USERS, null, cv)
-        if (result == -1.toLong())
-            Toast.makeText(
-                context,
-                "Please Ensure All Required Fields Are Filled Out",
-                Toast.LENGTH_SHORT
-            ).show()
+        if(result == -1.toLong())
+            Toast.makeText(context, "Please Ensure All Required Fields Are Filled Out", Toast.LENGTH_SHORT).show()
         else
-            Toast.makeText(
-                context,
-                "You Have Successfully Added " + user.username + " As A New User",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(context, "You Have Successfully Added " + user.username + " As A New User", Toast.LENGTH_SHORT).show()
     }
 
-    // Method to read and return product data from the database
+    // Method to read and return data from the database
     @SuppressLint("Range")
-    fun readData(): MutableList<Product> {
+    fun readData() : MutableList<Product>{
 
         // Create an observable array of products
         var list: MutableList<Product> = ArrayList()
@@ -149,8 +117,8 @@ class DataBaseHandler(private var context: Context) :
         val result = db.rawQuery(query, null)
 
         // Checks whether the query returned a result, if so,  iterate through the result and add products to the list
-        if (result.moveToFirst()) {
-            do {
+        if(result.moveToFirst()){
+            do{
                 var product = Product()
                 // Get data from the result and add it into an instance of the product object
                 product.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
@@ -171,10 +139,8 @@ class DataBaseHandler(private var context: Context) :
     // Get
 
     // Method to get all data and order by username
-    // No longer used, TESTING PURPOSES ONLY
-    // Can be adapted to just show username and role for administrative purposes
     @SuppressLint("Range")
-    fun readUserData(): MutableList<User> {
+    fun readUserData() : MutableList<User>{
         // Create an observable array of users
         var list: MutableList<User> = ArrayList()
 
@@ -187,8 +153,8 @@ class DataBaseHandler(private var context: Context) :
         // Execute the query and get the result
         val result = db.rawQuery(query, null)
         // Checks whether the query returned a result, if so,  iterate through the result and add usernames to the list
-        if (result.moveToFirst()) {
-            do {
+        if(result.moveToFirst()){
+            do{
                 var user = User()
                 // Get data from the result and add it into an instance of the product object
                 user.username = result.getString(result.getColumnIndex(COL_USERNAME))
@@ -201,24 +167,15 @@ class DataBaseHandler(private var context: Context) :
         return list
     }
 
-    // Checks user credentials
-    // Takes values as pairs to check against one another
+    // readLoginData
+    // Add this function to your DataBaseHandler class
     fun checkUserCredentials(username: String, password: String): Boolean {
         val db = this.readableDatabase
-
-        // Creates an array of what columns to use for the query
         val columns = arrayOf("username", "password")
-
-        // 'WHERE' criteria
         val selection = "username = ? AND password = ?"
-
-        // Values for WHERE
         val selectionArgs = arrayOf(username, password)
-
-        // Execute query
         val cursor = db.query("Users", columns, selection, selectionArgs, null, null, null)
 
-        // Checks if it returns any rows
         val result = cursor.count > 0
         cursor.close()
         db.close()
@@ -227,8 +184,8 @@ class DataBaseHandler(private var context: Context) :
     }
 
     // Method to delete all data from the table
-    // No longer used
-    fun deleteData() {
+    fun deleteData(){
+        // TODO("UPDATE FUNCTION TO DELETE ROW INSTEAD OF TABLE")
         val db = this.writableDatabase
         // Delete all data from the table
         db.delete(TABLE_PRODUCTS, null, null)
@@ -237,28 +194,24 @@ class DataBaseHandler(private var context: Context) :
     }
 
     // Method to update the quantity of all products in the table
-    // No Longer Used
     @SuppressLint("Range")
-    fun updateData() {
+    fun updateData(){
+        // TODO("UPDATE FUNCTION TO EDIT SPECIFIC ROW INSTEAD OF INCREMENT QUANTITY")
         val db = this.writableDatabase
         // SQL query to select all data from the table
         val query = "Select * from $TABLE_PRODUCTS"
         // Execute the query and get the result
-        val result = db.rawQuery(query, null)
+        val result = db.rawQuery(query,null)
         // If there is data, iterate through the result and update the quantity
-        if (result.moveToFirst()) {
+        if(result.moveToFirst()){
             do {
                 var cv = ContentValues()
                 // Increment the quantity value and update the row in the table
-                cv.put(COL_QUANTITY, (result.getInt(result.getColumnIndex(COL_QUANTITY)) + 1))
-                db.update(
-                    TABLE_PRODUCTS, cv, COL_ID + "=? AND " + COL_BRAND + "=?",
-                    arrayOf(
-                        result.getString(result.getColumnIndex(COL_ID)),
-                        result.getString(result.getColumnIndex(COL_BRAND))
-                    )
-                )
-            } while (result.moveToNext())
+                cv.put(COL_QUANTITY,(result.getInt(result.getColumnIndex(COL_QUANTITY))+1))
+                db.update(TABLE_PRODUCTS,cv,COL_ID + "=? AND " + COL_BRAND + "=?",
+                    arrayOf(result.getString(result.getColumnIndex(COL_ID)),
+                        result.getString(result.getColumnIndex(COL_BRAND))))
+            }while (result.moveToNext())
         }
         // Close the result and the database
         result.close()
