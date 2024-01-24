@@ -117,6 +117,17 @@
             android:fontFamily="@font/roboto"/>
 
         <Button
+            android:id="@+id/btn_scan"
+            android:layout_width="wrap_content"
+            android:layout_height="51dp"
+            android:layout_marginTop="60dp"
+            android:fontFamily="@font/roboto"
+            android:text="Scan"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert" />
+
+        <Button
             android:id="@+id/btn_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -138,12 +149,12 @@
 
         <ScrollView
             android:id="@+id/scrollView2"
-            android:layout_width="388dp"
-            android:layout_height="288dp"
+            android:layout_width="366dp"
+            android:layout_height="200dp"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="440dp"
+            android:layout_marginTop="504dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.076"
+            app:layout_constraintHorizontal_bias="0.342"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 

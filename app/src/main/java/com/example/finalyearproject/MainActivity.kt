@@ -15,12 +15,16 @@ class MainActivity : AppCompatActivity() {
 //    val db = DataBaseHandler(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Force lightmode
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+        //Inflate Activity
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-
+        // Set up Navigation Controller for the Bottom Navigation Bar
+        // Navigation Bar code adapted from: https://androidgeek.co/how-to-create-a-bottom-navigation-bar-in-kotlin-in-depth-guide-cd6876e94441
         navController = Navigation.findNavController(this, R.id.activity_main_nav_host_fragment)
         setupWithNavController(binding.bottomNavigationView, navController)
         setSupportActionBar(findViewById(R.id.my_toolbar))
