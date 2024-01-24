@@ -46,15 +46,6 @@ class AccountFragment : Fragment() {
             } else {
                 Toast.makeText(context, "Please Fill in All fields", Toast.LENGTH_SHORT).show()
             }
-            // Read User
-            // TESTING PURPOSES ONLY
-//            val data = db.readUserData()
-//            binding.tvUserResult.text = ""
-//            for (i in 0 until data.size) {
-//                binding.tvUserResult.append(
-//                    "${data[i].username} | ${data[i].password} | ${data[i].role}\n"
-//                )
-//            }
         }
 
         binding.btnLogin.setOnClickListener {
@@ -63,9 +54,8 @@ class AccountFragment : Fragment() {
 
             if (username.isNotEmpty() && password.isNotEmpty()) {
                 if (db.checkUserCredentials(username, password)) {
-                    // User credentials are valid
+                    // Valid credentials
                     Toast.makeText(context, "Login successful", Toast.LENGTH_SHORT).show()
-                    // Add code to navigate to the next screen or perform the necessary actions
                 } else {
                     // Invalid credentials
                     Toast.makeText(context, "Invalid username or password", Toast.LENGTH_SHORT).show()
