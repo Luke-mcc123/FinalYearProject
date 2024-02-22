@@ -3,26 +3,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/listFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.finalyearproject.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
-    <fragment
-        android:id="@+id/addproductFragment"
+        android:id="@+id/addProductFragment"
         android:name="com.example.finalyearproject.AddProductFragment"
         android:label="fragment_add_product"
         tools:layout="@layout/fragment_add_product" />
+
     <fragment
         android:id="@+id/listFragment"
         android:name="com.example.finalyearproject.ListFragment"
         android:label="fragment_list"
-        tools:layout="@layout/fragment_list"/>
+        tools:layout="@layout/fragment_list">
+        <!-- Define the navigation action to ProductDetailsFragment -->
+        <action
+            android:id="@+id/action_listFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" />
+    </fragment>
+
     <fragment
-        android:id="@+id/accountFragment"
-        android:name="com.example.finalyearproject.AccountFragment"
-        android:label="fragment_account"
-        tools:layout="@layout/fragment_account" />
+        android:id="@+id/productDetailsFragment"
+        android:name="com.example.finalyearproject.ProductDetailsFragment"
+        android:label="fragment_product_details"
+        tools:layout="@layout/fragment_product_details" />
+
+    <!-- Global actions for navigation -->
+    <action android:id="@+id/action_global_to_productDetailsFragment"
+        app:destination="@id/productDetailsFragment" />
+    <action android:id="@+id/action_global_to_addProductFragment"
+        app:destination="@id/addProductFragment" />
 </navigation>

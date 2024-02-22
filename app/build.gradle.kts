@@ -2,7 +2,9 @@ plugins {
     id ("com.android.application")
     id ("kotlin-android")
     id ("kotlin-kapt")
-    id("com.google.devtools.ksp")
+    id ("androidx.navigation.safeargs.kotlin") apply true// Ensure this plugin is applied for Safe Args
+    id ("com.google.devtools.ksp") apply false // Applied conditionally, ensure it's needed
+    id ("kotlin-parcelize")
 
 }
 
@@ -53,8 +55,8 @@ dependencies {
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.4.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

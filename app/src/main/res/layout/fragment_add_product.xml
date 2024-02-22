@@ -11,19 +11,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <EditText
-            android:id="@+id/etvType"
+            android:id="@+id/etvDescription"
             android:layout_width="340dp"
             android:layout_height="51dp"
             android:ems="10"
-            android:hint="Type"
-            android:inputType="text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.492"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etvBrand"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:fontFamily="@font/roboto"/>
+            android:fontFamily="@font/roboto"
+            android:hint="Description"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvBrand" />
 
 
         <EditText
@@ -37,9 +36,9 @@
             android:hint="Note"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.492"
+            app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etvType" />
+            app:layout_constraintTop_toBottomOf="@+id/etvDescription" />
 
         <EditText
             android:id="@+id/etvBarcode"
@@ -84,37 +83,43 @@
 
         <EditText
             android:id="@+id/etvQuantity"
-            android:layout_width="340dp"
-            android:layout_height="51dp"
+            android:layout_width="85dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="324dp"
             android:ems="10"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="@font/roboto"
             android:hint="Quantity"
             android:inputType="number"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.11"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etvNote"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:fontFamily="@font/roboto"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/btn_insert"
             android:layout_width="340dp"
             android:layout_height="51dp"
+            android:fontFamily="@font/roboto"
             android:text="Insert"
+            android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etvQuantity"
-            android:fontFamily="@font/roboto"/>
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" />
 
         <Button
             android:id="@+id/btn_read"
             android:layout_width="wrap_content"
             android:layout_height="51dp"
             android:layout_marginStart="36dp"
+            android:fontFamily="@font/roboto"
             android:text="Read"
+            android:textColor="#000000"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_insert"
-            android:fontFamily="@font/roboto"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert" />
 
         <Button
             android:id="@+id/btn_scan"
@@ -123,6 +128,7 @@
             android:layout_marginTop="60dp"
             android:fontFamily="@font/roboto"
             android:text="Scan"
+            android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_insert" />
@@ -131,40 +137,54 @@
             android:id="@+id/btn_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto"
             android:text="Update"
+            android:textColor="#000000"
             app:layout_constraintEnd_toStartOf="@+id/btn_delete"
             app:layout_constraintStart_toEndOf="@+id/btn_read"
-            app:layout_constraintTop_toBottomOf="@+id/btn_insert"
-            android:fontFamily="@font/roboto"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert" />
 
         <Button
             android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="51dp"
             android:layout_marginEnd="36dp"
+            android:fontFamily="@font/roboto"
             android:text="Delete"
+            android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_insert"
-            android:fontFamily="@font/roboto"/>
+            app:layout_constraintTop_toBottomOf="@+id/btn_insert" />
 
-        <ScrollView
-            android:id="@+id/scrollView2"
-            android:layout_width="366dp"
-            android:layout_height="200dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="504dp"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etvDate"
+            android:layout_width="340dp"
+            android:layout_height="51dp"
+            android:drawableRight="@drawable/ic_calendar"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="Expiry Date"
+            android:inputType="none"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.342"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etvNote" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout2"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="340dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="376dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/tvResult"
+            <AutoCompleteTextView
+                android:id="@+id/etvCategory"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/roboto"
-                android:visibility="visible" />
+                android:layout_height="match_parent"
+                android:inputType="none"
+                android:text="Category" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

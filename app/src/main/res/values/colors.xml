@@ -2,5 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="actionbar">#CAC1EA</color>
+    <color name="actionbar">#FF9800</color>
+    <color name="productWarning">#FDFD96</color>
+    <color name="dateWarning">#AEC6CF</color>
 </resources>

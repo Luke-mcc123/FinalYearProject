@@ -1,6 +1,21 @@
 <resources>
-    <string name="app_name">FinalYearProject</string>
+    <string name="app_name">StockPro</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="construction">Page Currently Under Construction, Please Check Back Later</string>
+    <string-array name="categories">
+        <item>Impulse Items</item>
+        <item>Edible</item>
+        <item>Non-Food</item>
+        <item>Baby &amp; Kids</item>
+        <item>Personal Care</item>
+        <item>Alcohol</item>
+        <item>Produce</item>
+        <item>Dairy</item>
+        <item>Bread &amp; Cakes</item>
+        <item>Deli</item>
+        <item>Frozen</item>
+    </string-array>
+    <string name="product_not_found"> Product Not Found </string>
+    <string name = "back_button_description"> Back Button</string>
 </resources>

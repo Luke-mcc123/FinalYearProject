@@ -1,84 +1,86 @@
 package com.example.finalyearproject
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.finalyearproject.databinding.FragmentAddProductBinding
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.finalyearproject.databinding.FragmentListBinding
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+class ListFragment : Fragment(), RecyclerViewAdapter.OnItemClickListener {
 
-/**
- * A simple [Fragment] subclass.
- * Use the [ListFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ListFragment : Fragment() {
-//    // TODO: Rename and change types of parameters
-//    private var param1: String? = null
-//    private var param2: String? = null
-    private var _binding : FragmentListBinding? = null
+    private var _binding: FragmentListBinding? = null
     private val binding get() = _binding!!
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        arguments?.let {
-//            param1 = it.getString(ARG_PARAM1)
-//            param2 = it.getString(ARG_PARAM2)
-//        }
-//    }
+    private lateinit var databaseHandler: DataBaseHandler
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
+        databaseHandler = DataBaseHandler(requireContext())
+        setUpRecyclerView()
+        setupCategorySpinner()
     }
 
-    override fun onStart(){
-        super.onStart()
-        val context = requireContext()
-        val db = DataBaseHandler(context)
-        val data = db.readData()
-        binding.tvResult.text = ""
-        for (i in 0 until data.size) {
-            binding.tvResult.append(
-                "${data[i].barcode} | ${data[i].brand} | ${data[i].type} | " +
-                        "${data[i].note} | ${data[i].quantity}\n"
-            )
-        }
-
+    // Initialise the RecyclerView and its adapter with products from db
+    private fun setUpRecyclerView() {
+        binding.recyclerView.layoutManager = LinearLayoutManager(context)
+        val products = databaseHandler.readData().toMutableList()
+        val adapter = RecyclerViewAdapter(products, this)
+        binding.recyclerView.adapter = adapter
     }
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment ListFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ListFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+
+    private fun setupCategorySpinner() {
+        // Load categories from resources and convert to mutable list to add "All"
+        val categories = resources.getStringArray(R.array.categories).toMutableList()
+        // Add "All" at the beginning of the list
+        categories.add(0, "All")
+
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_dropdown_item,
+            categories
+        )
+        binding.spinnerCategories.adapter = adapter
+        binding.spinnerCategories.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    val selectedCategory = parent.getItemAtPosition(position) as String
+                    // Update your RecyclerView based on the selected category
+                    (binding.recyclerView.adapter as? RecyclerViewAdapter)?.filter(selectedCategory)
                 }
+
+                override fun onNothingSelected(parent: AdapterView<*>) {}
             }
+    }
+
+
+    // Navigate to to ProductDetailsFragment when user clicks product and passes in the barcode with bundle
+    override fun onItemClick(product: Product) {
+        val bundle = Bundle().apply {
+            putLong("barcode", product.barcode)
+        }
+        findNavController().navigate(R.id.action_global_to_productDetailsFragment, bundle)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

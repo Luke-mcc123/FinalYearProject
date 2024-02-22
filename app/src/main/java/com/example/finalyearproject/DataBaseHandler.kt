@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.widget.Toast
+import java.util.Date
 
 /**
  * Code Adapted from https://github.com/kmvignesh/SqliteExample
@@ -19,9 +20,19 @@ const val COL_ID = "Id"
 const val TABLE_PRODUCTS = "Products"
 const val COL_BARCODE = "Barcode"
 const val COL_BRAND = "Brand"
-const val COL_TYPE = "Type"
+const val COL_DESCRIPTION = "Description"
 const val COL_NOTE = "Note"
 const val COL_QUANTITY = "Quantity"
+const val COL_CATEGORY = "Category"
+const val COL_DATE = "Date"
+
+// Transaction Table Values
+const val TABLE_TRANSACTIONS = "Transactions"
+const val COL_TRANSACTION_ID = "Id"
+const val COL_TRANSACTION_DATE = "Date"
+const val COL_QUANTITY_CHANGE = "QuantityChange"
+const val COL_PRODUCT_BARCODE = "ProductBarcode"
+
 
 // User Table Values
 const val TABLE_USERS = "Users"
@@ -31,16 +42,23 @@ const val COL_ROLE = "Role"
 
 // Class responsible for handling the database operations
 class DataBaseHandler(private var context: Context) :
-    SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
+    SQLiteOpenHelper(context, DATABASE_NAME, null, 2) {
 
     override fun onCreate(db: SQLiteDatabase?) {
 
         // Creating the Products Table
         val createProductsTable =
-            "CREATE TABLE IF NOT EXISTS $TABLE_PRODUCTS ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT,$COL_BARCODE INTEGER,$COL_BRAND VARCHAR(256),$COL_TYPE VARCHAR(256),$COL_NOTE VARCHAR(256),$COL_QUANTITY INTEGER)"
+            "CREATE TABLE IF NOT EXISTS $TABLE_PRODUCTS ($COL_ID INTEGER PRIMARY KEY AUTOINCREMENT,$COL_BARCODE INTEGER,$COL_BRAND VARCHAR(256),$COL_DESCRIPTION VARCHAR(256),$COL_NOTE VARCHAR(256),$COL_QUANTITY INTEGER,$COL_CATEGORY VARCHAR(256),$COL_DATE INTEGER)"
 
         // Execute SQL query
         db?.execSQL(createProductsTable)
+
+        // Creating the Transaction Table
+        val createTransactionTable =
+            "CREATE TABLE IF NOT EXISTS $TABLE_TRANSACTIONS ($COL_TRANSACTION_ID INTEGER PRIMARY KEY AUTOINCREMENT,$COL_TRANSACTION_DATE INTEGER, $COL_QUANTITY_CHANGE INTEGER, $COL_PRODUCT_BARCODE INTEGER, FOREIGN KEY ($COL_PRODUCT_BARCODE) REFERENCES $TABLE_PRODUCTS($COL_BARCODE))"
+
+        //Execute SQL Query
+        db?.execSQL(createTransactionTable)
 
         //Creating the User Table
         val createUserTable =
@@ -52,24 +70,42 @@ class DataBaseHandler(private var context: Context) :
 
     // Method called when the database is upgraded (not yet implemented)
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-        TODO("Not yet implemented")
+        // Allow for incremental database upgrades
+        var upgradeVersion = oldVersion
+
+        if(upgradeVersion == 1){
+            // Create the transactions table
+            val createTransactionTable =
+                "CREATE TABLE IF NOT EXISTS $TABLE_TRANSACTIONS ($COL_TRANSACTION_ID INTEGER PRIMARY KEY AUTOINCREMENT,$COL_TRANSACTION_DATE INTEGER, $COL_QUANTITY_CHANGE INTEGER, $COL_PRODUCT_BARCODE INTEGER, FOREIGN KEY ($COL_PRODUCT_BARCODE) REFERENCES $TABLE_PRODUCTS($COL_BARCODE))"
+
+            //Execute SQL Query
+            db?.execSQL(createTransactionTable)
+
+            //Increment version number
+            upgradeVersion = 2
+        }
     }
 
-    // Update specific product
+    /*---------------------------- PRODUCT FUNCTIONS -------------------------------*/
+
+    // Update Specific Product (Edit)
     // Takes inputted barcode and finds related entry and updates the row with the new data
     fun updateProductData(product: Product) {
         val db = this.writableDatabase
         var cv = ContentValues()
         cv.put(COL_BARCODE, product.barcode)
         cv.put(COL_BRAND, product.brand)
-        cv.put(COL_TYPE, product.type)
+        cv.put(COL_DESCRIPTION, product.description)
         cv.put(COL_NOTE, product.note)
         cv.put(COL_QUANTITY, product.quantity)
+        cv.put(COL_CATEGORY, product.category)
+        cv.put(COL_DATE, product.date?.time)
+
 
         db.update(TABLE_PRODUCTS, cv, "barcode =" + product.barcode, null)
     }
 
-    // Delete specific product data
+    // Delete Specific Product Data
     // Takes inputted barcode and deletes the associated row
     fun deleteProductData(product: Product) {
         val db = this.writableDatabase
@@ -78,7 +114,7 @@ class DataBaseHandler(private var context: Context) :
     }
 
 
-    // Method to insert product data into the database
+    // Insert Product Data
     fun insertData(product: Product) {
         val db = this.writableDatabase
         var cv = ContentValues()
@@ -86,9 +122,11 @@ class DataBaseHandler(private var context: Context) :
         // Assigning data to the content values
         cv.put(COL_BARCODE, product.barcode)
         cv.put(COL_BRAND, product.brand)
-        cv.put(COL_TYPE, product.type)
+        cv.put(COL_DESCRIPTION, product.description)
         cv.put(COL_NOTE, product.note)
         cv.put(COL_QUANTITY, product.quantity)
+        cv.put(COL_CATEGORY, product.category)
+        cv.put(COL_DATE, product.date?.time)
 
         // Insert data into the table and show a Toast message based on the result
         var result = db.insert(TABLE_PRODUCTS, null, cv)
@@ -101,11 +139,83 @@ class DataBaseHandler(private var context: Context) :
         else
             Toast.makeText(
                 context,
-                "You Have Successfully Added " + product.brand + " " + product.type,
+                "You Have Successfully Added " + product.brand + " " + product.description,
                 Toast.LENGTH_SHORT
             ).show()
     }
 
+
+    // Read and List All Product Information
+    @SuppressLint("Range")
+    fun readData(): MutableList<Product> {
+        val list: MutableList<Product> = ArrayList()
+        val db = this.readableDatabase
+        val query = "Select * from $TABLE_PRODUCTS"
+        val result = db.rawQuery(query, null)
+
+        if (result.moveToFirst()) {
+            do {
+                val product = Product()
+                product.barcode = result.getString(result.getColumnIndex(COL_BARCODE)).toLong()
+                product.brand = result.getString(result.getColumnIndex(COL_BRAND))
+                product.description = result.getString(result.getColumnIndex(COL_DESCRIPTION))
+                product.note = result.getString(result.getColumnIndex(COL_NOTE))
+                product.category = result.getString(result.getColumnIndex(COL_CATEGORY))
+                product.quantity = result.getString(result.getColumnIndex(COL_QUANTITY)).toInt()
+
+                // Handle date conversion
+                val dateString = result.getLong(result.getColumnIndex(COL_DATE))
+
+                // Convert Unix timestamp to Date
+                if (dateString != null) {
+                    val date = Date(dateString)
+                    product.date = date
+                }
+                list.add(product)
+            } while (result.moveToNext())
+        }
+
+        result.close()
+        db.close()
+
+        return list
+    }
+
+    // Read Specific Product
+    @SuppressLint("Range")
+    fun getProductByBarcode(barcode: Long): Product?{
+        val db= this.readableDatabase
+        val query = "SELECT * FROM $TABLE_PRODUCTS WHERE $COL_BARCODE = ?"
+        val selectionArgs = arrayOf(barcode.toString())
+
+        val result = db.rawQuery(query, selectionArgs)
+        var product: Product? = null
+
+        if(result.moveToFirst()){
+            product = Product()
+            product.barcode = result.getString(result.getColumnIndex(COL_BARCODE)).toLong()
+            product.brand = result.getString(result.getColumnIndex(COL_BRAND))
+            product.description = result.getString(result.getColumnIndex(COL_DESCRIPTION))
+            product.note = result.getString(result.getColumnIndex(COL_NOTE))
+            product.category = result.getString(result.getColumnIndex(COL_CATEGORY))
+            product.quantity = result.getString(result.getColumnIndex(COL_QUANTITY)).toInt()
+            // Handle date conversion
+            val dateString = result.getLong(result.getColumnIndex(COL_DATE))
+
+            // Convert Unix timestamp to Date
+            if (dateString != null) {
+                val date = Date(dateString)
+                product.date = date
+            }
+
+        }
+        result.close()
+        db.close()
+
+        return product
+    }
+
+    /* ----------------------------------- USER FUNCTIONS -------------------------------------- */
     // Method to create a new user
     fun insertUserData(user: User) {
         val db = this.writableDatabase
@@ -131,44 +241,6 @@ class DataBaseHandler(private var context: Context) :
                 Toast.LENGTH_SHORT
             ).show()
     }
-
-    // Method to read and return product data from the database
-    @SuppressLint("Range")
-    fun readData(): MutableList<Product> {
-
-        // Create an observable array of products
-        var list: MutableList<Product> = ArrayList()
-
-        // Get a readable database
-        val db = this.readableDatabase
-
-        // SQL query to select all data from the table
-        val query = "Select * from $TABLE_PRODUCTS"
-
-        // Execute the query and get the result
-        val result = db.rawQuery(query, null)
-
-        // Checks whether the query returned a result, if so,  iterate through the result and add products to the list
-        if (result.moveToFirst()) {
-            do {
-                var product = Product()
-                // Get data from the result and add it into an instance of the product object
-                product.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
-                product.barcode = result.getString(result.getColumnIndex(COL_BARCODE)).toInt()
-                product.brand = result.getString(result.getColumnIndex(COL_BRAND))
-                product.type = result.getString(result.getColumnIndex(COL_TYPE))
-                product.note = result.getString(result.getColumnIndex(COL_NOTE))
-                product.quantity = result.getString(result.getColumnIndex(COL_QUANTITY)).toInt()
-                list.add(product)
-            } while (result.moveToNext())
-        }
-        // Close the result and the database, then return the list
-        result.close()
-        db.close()
-        return list
-    }
-
-    // Get
 
     // Method to get all data and order by username
     // No longer used, TESTING PURPOSES ONLY
@@ -224,45 +296,6 @@ class DataBaseHandler(private var context: Context) :
         db.close()
 
         return result
-    }
-
-    // Method to delete all data from the table
-    // No longer used
-    fun deleteData() {
-        val db = this.writableDatabase
-        // Delete all data from the table
-        db.delete(TABLE_PRODUCTS, null, null)
-        // Close the database
-        db.close()
-    }
-
-    // Method to update the quantity of all products in the table
-    // No Longer Used
-    @SuppressLint("Range")
-    fun updateData() {
-        val db = this.writableDatabase
-        // SQL query to select all data from the table
-        val query = "Select * from $TABLE_PRODUCTS"
-        // Execute the query and get the result
-        val result = db.rawQuery(query, null)
-        // If there is data, iterate through the result and update the quantity
-        if (result.moveToFirst()) {
-            do {
-                var cv = ContentValues()
-                // Increment the quantity value and update the row in the table
-                cv.put(COL_QUANTITY, (result.getInt(result.getColumnIndex(COL_QUANTITY)) + 1))
-                db.update(
-                    TABLE_PRODUCTS, cv, COL_ID + "=? AND " + COL_BRAND + "=?",
-                    arrayOf(
-                        result.getString(result.getColumnIndex(COL_ID)),
-                        result.getString(result.getColumnIndex(COL_BRAND))
-                    )
-                )
-            } while (result.moveToNext())
-        }
-        // Close the result and the database
-        result.close()
-        db.close()
     }
 }
 
